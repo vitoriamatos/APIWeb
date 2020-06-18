@@ -1,0 +1,205 @@
+<!DOCTYPE html lang="pt-br">
+ <head>
+    <meta charset="utf-8" />
+        <title>Cadastro de Cursos</title>
+
+        <!-- Bootstrap início -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <!-- Bootstrap fim -->
+    <link rel="stylesheet" type="text/css" href="css/registerView.css">
+    <!-- Font Awesome -->
+    <script defer src="https://use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
+
+   
+
+    </head>
+
+  <body>
+
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary mb-5">
+      <div class="container">
+        <a class="navbar-brand" href="Home.html">
+           <img class= "menu" src="image/icon.png" width="60" height="40">
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item active">
+                <a  href="StudentRegister.html" class="nav-link">Matricula</a>
+              </li>
+              <li class="nav-item active">
+
+                <a href="StudentData.html" class="nav-link">Alunos</a>
+              </li>
+              <li class="nav-item divisor"></li>
+
+              
+
+             <li class="nav-item active">
+                <a href="CourseData.html" class="nav-link">Curso</a>
+            </li>
+        
+        <li class="nav-item active">
+                <a href="CourseRegister.html" class="nav-link">Cadastrar</a>
+            </li>
+          </ul>
+          
+        </div>
+      </div>
+    
+    </nav>
+
+   <body>
+        <div class="container">
+            <header>
+                <h1>Formulário para Cadastro de alunos em um curso</h1>
+            </header>
+            <main>
+                
+                <div class="text-area">
+
+                    <form action="">
+                        <label for="courseName">Curso:</label>
+                        <input class="courseName" name="courseName" maxlength="50">
+                        
+                        <label for="name">Nome do aluno: </label>
+                        <input class="name" type="text" name="name" maxlength="50">
+                        <br>
+
+                        <br>
+                        <label for="registerId">Matricula:</label>
+                        <input class="registerId" name="registerId" maxlength="50">
+                        <br>
+
+                        <input class="confirmeRegister" type="submit" value="Confirmar">
+                        <a href="CourseData.html"><input class="cancelRegister" type="button" value="Cancelar"></a>
+                    </form>
+                </div>
+            </main>
+        </div>
+        <script>
+
+        //All logic here 
+          //Variables - HTML
+            var field_course_name = document.querySelector("input.courseName");
+            var field_name = document.querySelector("input.name");
+            var filed_register_id = document.querySelector("input.registerId");
+            var button_confirme = document.querySelector("input.confirmeRegister");
+            var button_cancel = document.querySelector("input.cancelRegister");
+
+            var idAction = Number(localStorage.getItem("idAction"));
+
+            
+            //Sequency
+            var courseSeq = Number(localStorage.getItem("courseSeq"));
+            if(! courseSeq ){
+                courseSeq = 0;
+            }
+
+            //Object
+            var CourseList = JSON.parse(localStorage.getItem("CourseList"));
+            if(! CourseList ){
+                CourseList = {Course:[]};
+            }
+
+            //JSON
+            var myJSON;
+
+            //Functions
+            function justNumber(e){
+                var key = String.fromCharCode(e.which);
+                var regex = /[0-9]/;
+                if(! (key.match(regex))){
+                    return false;
+                }
+            }
+
+            function justChar(e) {
+                var key = String.fromCharCode(e.which);
+                var regex = /[a-zA-Z ]/;
+                if(! (key.match(regex))){
+                    return false;
+                }
+            }
+
+
+            function checkData(event) {
+                field_name.value = field_name.value.trim();
+                if (field_name.value == "" || field_course_name.value == "" || filed_register_id.value == "") {
+                    alert("Dados Inválidos! Tente Novamente.");
+                }
+                else{
+                    storeData(event);
+                }
+            }
+
+            function storeData(event) {
+                event.preventDefault();
+                //For add or modify one course of CourseList
+                if (idAction == 0) {
+                    courseSeq += 1;
+                    CourseList.Course.push({courseName: field_course_name.value, name: field_name.value, registerId: filed_register_id.value, id: courseSeq});
+                }
+                else{
+                    CourseList.Course.forEach(e => {
+                        if (e.id == idAction){
+                            var indexCourse = CourseList.Course.indexOf(e);
+                            CourseList.Course.splice(indexCourse, 1, {courseName : field_course_name.value, name : field_name.value, registerId : filed_register_id.value, id: idAction});
+                        }
+                    });
+                }
+                myJSON = JSON.stringify(CourseList);
+                localStorage.setItem("CourseList", myJSON);
+                localStorage.setItem("courseSeq", courseSeq);
+                window.location.assign("CourseData.html");
+            }
+
+            function fillFieldsEdit() {                
+                    if (idAction != 0) {
+                        var valueCourseName;
+                        var valueName;
+                        var valueRegisterId;
+                        
+                        CourseList.Course.forEach(e => {
+                            if (e.id == idAction){
+                                valueCourseName = e.courseName;
+                                valueName = e.name;
+                                valueRegisterId = e.registerId;
+
+                            }
+                        });
+                        field_course_name.setAttribute("value", valueCourseName);
+                        field_name.setAttribute("value", valueName);
+                        filed_register_id.setAttribute("value", valueRegisterId);
+                        
+                }
+            }
+
+            //Main Routine
+
+            window.onload = fillFieldsEdit();
+
+            field_course_name.onkeypress = justChar;
+            field_name.onkeypress = justChar;
+            filed_register_id.onkeypress = justNumber;
+           
+
+
+            button_confirme.addEventListener("click", checkData);
+            button_cancel.addEventListener("click", function(){
+                window.location.assign("CourseData.html");
+            });
+            
+               
+        </script>
+    </body> 
+
+</html>

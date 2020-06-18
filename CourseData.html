@@ -1,0 +1,197 @@
+<!DOCTYPE html lang="pt-br">
+
+<head>
+    <head>
+    <meta charset="utf-8" />
+        <title>Cursos Cadastrados</title>
+
+        <!-- Bootstrap início -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <!-- Bootstrap fim -->
+    <link rel="stylesheet" type="text/css" href="css/listView.css">
+    <!-- Font Awesome -->
+    <script defer src="https://use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
+
+   
+
+    </head>
+
+  <body>
+
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary mb-5">
+      <div class="container">
+        <a class="navbar-brand" href="Home.html">
+           <img class= "menu" src="image/icon.png" width="60" height="40">
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item active">
+                <a  href="StudentRegister.html" class="nav-link">Matricula</a>
+              </li>
+              <li class="nav-item active">
+
+                <a href="StudentData.html" class="nav-link">Alunos</a>
+              </li>
+              <li class="nav-item divisor"></li>
+
+              
+
+             <li class="nav-item active">
+                <a href="CourseData.html" class="nav-link">Curso</a>
+            </li>
+        
+        <li class="nav-item active">
+                <a href="CourseRegister.html" class="nav-link">Cadastrar</a>
+            </li>
+          </ul>
+          
+        </div>
+      </div>
+    
+    </nav>
+
+    <div class="container">
+            
+            <header>
+                <h1>Lista de Cursos</h2>
+            </header>
+            <main>
+                
+            <div class="text-area">
+
+                <div>
+                    <img id="icone_cadastro" class="icone_cadastro" src="image/plus_icon.png" alt="">
+                    <p>Cadastrar novo Curso</p>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Curso</th>
+                                <th>Matricula</th>
+                                <th>Nome</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                        </tbody>
+
+                    </table>
+                </div>
+            </main>
+            <script>
+                
+             //Variables
+                var CourseList;
+                var table_body = document.querySelector("table tbody");
+                var registerCourseBtn = document.querySelector("#icone_cadastro");
+                var modifyBtn = [];
+                var removeBtn = [];
+                
+                //JSON
+                var myJSON_Student;
+
+                //Function
+                function loadTable() {
+                    CourseList = JSON.parse(localStorage.getItem("CourseList"));
+                    if (!CourseList){
+                        CourseList = {Course:[]};
+                    }
+                    CourseList.Course.forEach(create_line_course);
+
+                }
+
+                function create_line_course(e, i) {
+                    // create elements of course line
+                    var line = document.createElement("tr");
+                    var field_course_name = document.createElement("td");
+                    var field_name = document.createElement("td");
+                    var field_register_id = document.createElement("td");
+                   
+                    var field_actions = document.createElement("td");
+                    var img_modify = document.createElement("img");
+                    var img_remove = document.createElement("img");
+                    
+
+                    //Criar o conteúdo da linha criada
+                    var text_course_name = e.courseName;
+                    var text_name = e.name;
+                    var text_register_id = e.registerId;
+                    
+                    img_modify.setAttribute("src", "image/edit-icon.jpg");
+                    img_remove.setAttribute("src", "image/trash_icon.png");
+
+                    
+                    img_modify.id = e.id;
+                    img_remove.id = e.id;
+
+                    modifyBtn.push(img_modify);
+                    removeBtn.push(img_remove);
+
+                    //Link content to elements of the created line
+                    field_course_name.innerHTML = text_course_name;
+                    field_name.innerHTML = text_name;
+                    field_register_id.innerHTML = text_register_id;
+                   
+
+                    field_actions.appendChild(img_modify);
+                    field_actions.appendChild(img_remove);
+                            
+                    line.appendChild(field_course_name);
+                    line.appendChild(field_name);
+                    line.appendChild(field_register_id);
+                    line.appendChild(field_actions);
+                    
+                    
+                    //Link the elements of the created line to the document
+                    table_body.appendChild(line);               
+                }
+
+                function modifyCourse(e) {
+                    e.addEventListener("click", function(){
+                        localStorage.setItem("idAction", e.id);
+                        window.location.assign("CourseRegister.html");
+                    });
+                }
+
+                function removeCourse(e) {
+                    e.addEventListener("click", function(){
+                        
+                        for (let i = 0; i < CourseList.Course.length; i++) {
+                            if(CourseList.Course[i].id == e.id){
+                                CourseList.Course.splice(i, 1);
+                                myJSON_Student = JSON.stringify(CourseList);
+                                localStorage.setItem("CourseList", myJSON_Student);
+                                break;
+                            } 
+                        }
+                        window.location.reload();
+                    });
+                    
+                }
+
+                function registerCourse(event) {
+                    localStorage.setItem("idAction", 0);
+                    window.location.assign("CourseRegister.html");
+                }
+
+                //Main routine
+                window.onload = loadTable();
+                registerCourseBtn.addEventListener("click", registerCourse);
+                modifyBtn.forEach(modifyCourse);
+                removeBtn.forEach(removeCourse);
+
+
+            </script>
+        </div>
+    </div>
+    </body>
+</html>

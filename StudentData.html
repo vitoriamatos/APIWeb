@@ -1,0 +1,204 @@
+<!DOCTYPE html lang="pt-br">
+
+<head>
+    <head>
+    <meta charset="utf-8" />
+        <title>Alunos Cadastrados</title>
+
+        <!-- Bootstrap início -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <!-- Bootstrap fim -->
+    <link rel="stylesheet" type="text/css" href="css/listView.css">
+    <!-- Font Awesome -->
+    <script defer src="https://use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
+
+   
+
+    </head>
+
+  <body>
+
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary mb-5">
+      <div class="container">
+        <a class="navbar-brand" href="Home.html">
+           <img class= "menu" src="image/icon.png">
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item active">
+                <a  href="StudentRegister.html" class="nav-link">Matricula</a>
+              </li>
+              <li class="nav-item active">
+
+                <a href="StudentData.html" class="nav-link">Alunos</a>
+              </li>
+              <li class="nav-item divisor"></li>
+
+              
+
+             <li class="nav-item active">
+                <a href="CourseData.html" class="nav-link">Curso</a>
+            </li>
+        
+        <li class="nav-item active">
+                <a href="CourseRegister.html" class="nav-link">Cadastrar</a>
+            </li>
+          </ul>
+          
+        </div>
+      </div>
+    
+    </nav>
+
+
+       
+       
+        <div class="container">
+
+
+
+            <header>
+                <h1>Lista de Alunos</h2>
+            </header>
+            <main>
+                
+            <div class="text-area">
+                <div>
+                    <img id="icone_cadastro" class="icone_cadastro" src="image/plus_icon.png" alt="">
+                    <p>Cadastrar novo Aluno</p>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Matricula</th>
+                                <th>Nome</th>
+                                <th>Telefone</th>
+                                <th>CPF</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                        </tbody>
+
+                    </table>
+                </div>
+            </main>
+            <script>
+                
+                //ALL LOGIC HERE
+                
+                //Variables - HTML
+                var StudentList;
+                var table_body = document.querySelector("table tbody");
+                var studentRegisterBtn = document.querySelector("#icone_cadastro");
+                var modifyBtn = [];
+                var removeBtn = [];
+                
+                //JSON
+                var myJSON_Student;
+
+                //Funções
+                function loadTable() {
+                    StudentList = JSON.parse(localStorage.getItem("StudentList"));
+                    if (!StudentList){
+                        StudentList = {Student:[]};
+                    }
+                    StudentList.Student.forEach(create_line_student);
+
+                }
+
+                function create_line_student(e, i) {
+                     // create elements of student line
+                    var line = document.createElement("tr");
+                    var field_register_id = document.createElement("td");
+                    var field_name = document.createElement("td");
+                    var field_phone_number = document.createElement("td");
+                    var field_cpf = document.createElement("td");
+
+                    var field_actions = document.createElement("td");
+                    var img_modify = document.createElement("img");
+                    var img_remove = document.createElement("img");
+                    
+
+                    //Creat conteud of line
+                    var text_register_id = e.registerId;
+                    var text_name = e.name;
+                    var text_phone_Number = e.phoneNumber;
+                    var text_cpf = e.cpf;
+                    img_modify.setAttribute("src", "image/edit-icon.jpg");
+                    img_remove.setAttribute("src", "image/trash_icon.png");
+
+                    
+                    img_modify.id = e.id;
+                    img_remove.id = e.id;
+
+                    modifyBtn.push(img_modify);
+                    removeBtn.push(img_remove);
+
+                  //Link content to elements of the created line
+                    field_register_id.innerHTML = text_register_id;
+                    field_name.innerHTML = text_name;
+                    field_phone_number.innerHTML = text_phone_Number;
+                    field_cpf.innerHTML = text_cpf;
+
+                    field_actions.appendChild(img_modify);
+                    field_actions.appendChild(img_remove);
+                            
+                    line.appendChild(field_register_id);
+                    line.appendChild(field_name);
+                    line.appendChild(field_phone_number);
+                    line.appendChild(field_cpf);
+                    line.appendChild(field_actions);
+                     //Link the elements of the created line to the document
+                    table_body.appendChild(line);               
+                }
+
+                function studentModify(e) {
+                    e.addEventListener("click", function(){
+                        localStorage.setItem("idAction", e.id);
+                        window.location.assign("StudentRegister.html");
+                    });
+                }
+
+                function studentRemove(e) {
+                    e.addEventListener("click", function(){
+                        
+                        for (let i = 0; i < StudentList.Student.length; i++) {
+                            if(StudentList.Student[i].id == e.id){
+                                StudentList.Student.splice(i, 1);
+                                myJSON_Student = JSON.stringify(StudentList);
+                                localStorage.setItem("StudentList", myJSON_Student);
+                                break;
+                            } 
+                        }
+                        window.location.reload();
+                    });
+                    
+                }
+
+                function registerStudent(event) {
+                    localStorage.setItem("idAction", 0);
+                    window.location.assign("StudentRegister.html");
+                }
+
+                //Main routine
+                window.onload = loadTable();
+                studentRegisterBtn.addEventListener("click", registerStudent);
+                modifyBtn.forEach(studentModify);
+                removeBtn.forEach(studentRemove);
+
+            </script>
+        </div>
+    </div>
+
+    </body>
+</html>

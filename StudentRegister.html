@@ -1,0 +1,248 @@
+<!DOCTYPE html lang="pt-br">
+<html>
+    <head>
+    <head>
+    <meta charset="utf-8" />
+        <title>Cadastro de alunos</title>
+
+    <!-- Bootstrap Start -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <!-- Bootstrap End -->
+    <link rel="stylesheet" type="text/css" href="css/registerView.css">
+    <!-- Font Awesome -->
+    <script defer src="https://use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
+
+   
+
+    </head>
+
+  <body>
+
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary mb-5">
+      <div class="container">
+       
+        <a class="navbar-brand" href="Home.html">
+           <img class= "menu" src="image/icon.png" width="60" height="40">
+        </a>
+        
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item active">
+                <a  href="StudentRegister.html" class="nav-link">Matricula</a>
+              </li>
+              <li class="nav-item active">
+
+                <a href="StudentData.html" class="nav-link">Alunos</a>
+              </li>
+              <li class="nav-item divisor"></li>
+
+              
+
+             <li class="nav-item active">
+                <a href="CourseRegister.html" class="nav-link">Curso</a>
+            </li>
+        
+        <li class="nav-item active">
+                <a href="CourseData.html" class="nav-link">Cadastrar</a>
+            </li>
+          </ul>
+          
+        </div>
+      </div>
+    
+    </nav>
+    
+    <body>
+        <div class="container">
+            <header>
+                <h1>Formulário para Cadastro de Novo Aluno</h1>
+            </header>
+            <main>
+                
+                <div class="text-area">
+
+                    <form action="">
+                        <label for="registerId">Matricula: </label>
+                        <input class="registerId" name="matricula" maxlength="50">
+                        <label for="name">Nome:</label>
+                        <input class="name" type="text" name="name" maxlength="50">
+                        <br>
+                        <label for="phoneNumber">Telefone: </label>
+                        <input class="phoneNumber" name="phoneNumber"onkeydown="javascript: fMasc( this, mTel );" maxlength="18">
+                        <label for="cpf">CPF:  </label>
+                        <input class="cpf" name="cpf" onkeydown="javascript: fMasc( this, mCPF );"maxlength="18">
+                        <br>
+                        <br>
+
+                        <input class="confirmeRegister" type="submit" value="Confirmar">
+                        <a href="StudentData.html"><input class="cancelRegister" type="button" value="Cancelar"></a>
+                    </form>
+                </div>
+            </main>
+        </div>
+        <script>
+
+            //ALL LOGIC HERE
+            //Variábles - HTML
+            var field_register_id = document.querySelector("input.registerId");
+            var field_name = document.querySelector("input.name");
+            var field_phone_Number = document.querySelector("input.phoneNumber");
+            var field_cpf = document.querySelector("input.cpf")
+            var button_confirme = document.querySelector("input.confirmeRegister");
+            var button_cancel = document.querySelector("input.cancelRegister");
+
+            var idAction = Number(localStorage.getItem("idAction"));
+
+            
+            //Sequency
+            var studentSeq = Number(localStorage.getItem("studentSeq"));
+            if(! studentSeq ){
+                 studentSeq = 0;
+            }
+
+            //Object
+            var StudentList = JSON.parse(localStorage.getItem("StudentList"));
+            if(! StudentList ){
+                StudentList = {Student:[]};
+            }
+
+            //JSON
+            var myJSON_Student;
+
+            //Function
+            function justNumber(e){
+                var key = String.fromCharCode(e.which);
+                var regex = /[0-9]/;
+                if(! (key.match(regex))){
+		            return false;
+	            }
+            }
+
+            function justChar(e) {
+                var key = String.fromCharCode(e.which);
+                var regex = /[a-zA-Z ]/;
+                if(! (key.match(regex))){
+		            return false;
+	            }
+            }
+
+
+            function checkData(event) {
+                field_name.value = field_name.value.trim();
+                if (field_register_id.value == "" || field_name.value == "" || field_phone_Number.value == "" || field_cpf.value == "") {
+                    alert("Dados Inválidos! Tente Novamente.");
+                }
+                else{
+                    storeData(event);
+                }
+            }
+
+            function storeData(event) {
+                event.preventDefault();
+                 //For add or modify one course of StudentList
+                if (idAction == 0) {
+                    studentSeq += 1;
+                    StudentList.Student.push({registerId: field_register_id.value, name: field_name.value, phoneNumber: field_phone_Number.value,
+                        cpf: field_cpf.value, id: studentSeq});
+                            
+                }
+                else{
+                    StudentList.Student.forEach(e => {
+                        if (e.id == idAction){
+                            var indexStudent = StudentList.Student.indexOf(e);
+                            StudentList.Student.splice(indexStudent, 1, {registerId: field_register_id.value, name: field_name.value, phoneNumber: field_phone_Number.value, cpf: field_cpf.value, id: idAction});
+                        }
+                    });
+                }
+                myJSON_Student = JSON.stringify(StudentList);
+                localStorage.setItem("StudentList", myJSON_Student);
+                localStorage.setItem("studentSeq", studentSeq);
+                window.location.assign("StudentData.html");
+            }
+
+            function fillFieldsEdit() {                
+                    if (idAction != 0) {
+                        var valueRegisterId;
+                        var valueName;
+                        var valuePhoneNumber;
+                        var valueCpf;
+                        StudentList.Student.forEach(e => {
+                            if (e.id == idAction){
+                                valueRegisterId = e.registerId;
+                                valueName = e.name;
+                                valuePhoneNumber = e.phoneNumber;
+                                valueCpf = e.cpf;
+
+                            }
+                        });
+                        field_register_id.setAttribute("value", valueRegisterId);
+                        field_name.setAttribute("value", valueName);
+                        field_phone_Number.setAttribute("value", valuePhoneNumber);
+                        field_cpf.setAttribute("value", valueCpf);
+                }
+            }
+
+            //Main
+
+            window.onload = fillFieldsEdit();
+
+            field_register_id.onkeypress = justNumber;
+            field_name.onkeypress = justChar;
+            field_phone_Number.onkeypress = justNumber;
+            field_cpf.onkeypress = justNumber;
+            
+
+
+            button_confirme.addEventListener("click", checkData);
+            button_cancel.addEventListener("click", function(){
+                window.location.assign("StudentData.html");
+            });
+            
+
+// MASKS
+            function fMasc(objeto,mascara) {
+                obj=objeto
+                masc=mascara
+                setTimeout("fMascEx()",1)
+            }
+            function fMascEx() {
+                obj.value=masc(obj.value)
+            }
+            function mTel(tel) {
+                tel=tel.replace(/\D/g,"")
+                tel=tel.replace(/^(\d)/,"($1")
+                tel=tel.replace(/(.{3})(\d)/,"$1)$2")
+                if(tel.length == 9) {
+                    tel=tel.replace(/(.{1})$/,"-$1")
+                } else if (tel.length == 10) {
+                    tel=tel.replace(/(.{2})$/,"-$1")
+                } else if (tel.length == 11) {
+                    tel=tel.replace(/(.{3})$/,"-$1")
+                } else if (tel.length == 12) {
+                    tel=tel.replace(/(.{4})$/,"-$1")
+                } else if (tel.length > 12) {
+                    tel=tel.replace(/(.{4})$/,"-$1")
+                }
+                return tel;
+            }
+            
+            function mCPF(cpf){
+                cpf=cpf.replace(/\D/g,"")
+                cpf=cpf.replace(/(\d{3})(\d)/,"$1.$2")
+                cpf=cpf.replace(/(\d{3})(\d)/,"$1.$2")
+                cpf=cpf.replace(/(\d{3})(\d{1,2})$/,"$1-$2")
+                return cpf
+            }
+                
+        </script>
+    </body>
+</html>

@@ -1,0 +1,89 @@
+
+body{
+    background:#0F1426;
+}
+
+.text-area{
+
+    background:#ffff;
+    height: 600px;
+    padding: 10%;
+    padding-left: 20%;
+
+}
+
+header h1{
+     background-color: #00BFFF;
+     padding: 8%;
+     color: white;
+     text-align: center;
+
+
+}
+
+.menu{
+    width: 40px;
+    height: 40px;
+}
+
+.divisor {
+    width: 1px;
+    background: white;
+    margin: 12px 15px;
+}
+input{
+    
+    padding: -2%;
+    font-size: 1.3rem;
+    border-color: #00BFFF;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    outline: none;
+    margin: 1em;
+
+
+}
+
+
+.confirmeRegister{
+    color: white;
+    border-radius: 500px;
+    -webkit-border-radius: 500px;
+    -moz-border-radius: 500px;
+    text-transform: uppercase;
+    transition: background 0.4s, color 0.4s;
+    padding: 8px;
+    background: #00BFFF;
+    margin-left: 200px;
+
+    
+}
+
+.confirmeRegister:hover {
+    background: #007BFF;
+}
+
+
+.cancelRegister {
+    color: white;
+    font-family: "Arial";
+    border-radius: 500px;
+    -webkit-border-radius: 500px;
+    -moz-border-radius: 500px;
+    text-transform: uppercase;
+    transition: background 0.4s, color 0.4s;
+    padding: 8px;
+    background:#FF0000;
+    
+   
+}
+
+.cancelButton:hover {
+    background:  #B22222;
+}
+label{
+    color: #007BFF;
+}
+
+
